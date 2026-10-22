@@ -29,8 +29,8 @@ DEFAULT_DATA_QUALITY_RULESET = """
 # Script generated for node step trainer
 steptrainer_node1792205843927 = glueContext.create_dynamic_frame.from_options(format_options={"multiLine": "false"}, connection_type="s3", format="json", connection_options={"paths": ["s3://wgu-d609-tklein2/landing/step_trainer/"], "recurse": True}, transformation_ctx="steptrainer_node1792205843927")
 
-# Script generated for node curated customers
-curatedcustomers_node1792206002061 = glueContext.create_dynamic_frame.from_catalog(database="stedi", table_name="customers_curated", transformation_ctx="curatedcustomers_node1792206002061")
+# Script generated for node trusted customers
+trustedcustomers_node1792206002061 = glueContext.create_dynamic_frame.from_catalog(database="stedi", table_name="customer_trusted", transformation_ctx="trustedcustomers_node1792206002061")
 
 # Script generated for node SQL Query
 SqlQuery0 = '''
@@ -45,7 +45,7 @@ INNER JOIN (
 ) c
     ON s.serialNumber = c.serialNumber
 '''
-SQLQuery_node1792206042154 = sparkSqlQuery(glueContext, query = SqlQuery0, mapping = {"step_trainer_source":steptrainer_node1792205843927, "customer_source":curatedcustomers_node1792206002061}, transformation_ctx = "SQLQuery_node1792206042154")
+SQLQuery_node1792206042154 = sparkSqlQuery(glueContext, query = SqlQuery0, mapping = {"step_trainer_source":steptrainer_node1792205843927, "customer_source":trustedcustomers_node1792206002061}, transformation_ctx = "SQLQuery_node1792206042154")
 
 # Script generated for node Amazon S3
 EvaluateDataQuality().process_rows(frame=SQLQuery_node1792206042154, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1792205997770", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})
